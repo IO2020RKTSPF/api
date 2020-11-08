@@ -25,7 +25,7 @@ services:
     environment:
       MYSQL_DATABASE: pskdb
       MYSQL_ROOT_PASSWORD: Inop2020
-      MYSQL_USER: user
+      MYSQL_USER: root
       MYSQL_PASSWORD: Inop2020
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
