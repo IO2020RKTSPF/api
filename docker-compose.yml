@@ -1,0 +1,54 @@
+version: "3.7"
+
+services:
+  frontend:
+    container_name: frontend
+    restart: unless-stopped
+    tty: true
+    build:
+      context: ../frontend/
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+      - db
+    networks:
+      - app-network
+  db:
+    image: mariadb
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: pskdb
+      MYSQL_ROOT_PASSWORD: Inop2020
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Inop2020
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql/
+    networks:
+      - app-network
+  api:
+    container_name: api
+    restart: unless-stopped
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  dbdata:
+    driver: local
