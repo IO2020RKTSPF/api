@@ -11,7 +11,7 @@ namespace api.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required][Newtonsoft.Json.JsonIgnore][JsonIgnore][IgnoreMap][Ignore]
+        [Required][Newtonsoft.Json.JsonIgnore][JsonIgnore]
         public string LoginId { get; set; }
         [Required]
         public string Name { get; set; }
