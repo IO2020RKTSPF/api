@@ -56,7 +56,9 @@ namespace api
             });
 
             app.UseCors(x => x
-                .AllowAnyOrigin());
+                    .AllowAnyHeader()
+                    .AllowAnyOrigin())
+                .Build();
 
             app.UseHttpsRedirection();
 
