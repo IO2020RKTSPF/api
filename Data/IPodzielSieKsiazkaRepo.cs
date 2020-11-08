@@ -7,6 +7,7 @@ namespace api.Data
     public interface IPodzielSieKsiazkaRepo
     {
         bool SaveChanges();
+        
         IEnumerable<Book> GetAllBooks();
         Book GetBookById(int id);
         void AddBook(Book book);
