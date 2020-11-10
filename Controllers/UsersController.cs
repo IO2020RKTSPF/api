@@ -38,6 +38,8 @@ namespace api.Controllers
         [HttpPost]
         public ActionResult<UserReadDto> AddUser(UserAddDto userAddDto)
         {
+            if (_repo.GetUserByLoginId(userAddDto.LoginId) != null) 
+                return Forbid();
             var userModel = _mapper.Map<User>(userAddDto);
             _repo.AddUser(userModel);
             _repo.SaveChanges();
