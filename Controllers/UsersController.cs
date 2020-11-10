@@ -28,25 +28,16 @@ namespace api.Controllers
             return Ok(_mapper.Map<UserReadDto>(userItem));
         }
         [HttpGet("login/{id}")]
-        public ActionResult<UserReadDto> GetUserByLoginId(string id)
+        public ActionResult<UserReadDto> GetUserByLoginId(UserAddDto userAddDto)
         {
-            var userItem = _repo.GetUserByLoginId(id);
-            if (userItem == null) return NotFound();
-            return Ok(_mapper.Map<UserReadDto>(userItem));
-        }
-
-        [HttpPost]
-        public ActionResult<UserReadDto> AddUser(UserAddDto userAddDto)
-        {
-            if (_repo.GetUserByLoginId(userAddDto.LoginId) != null) 
-                return Forbid();
+            var userItem = _repo.GetUserByLoginId(userAddDto.LoginId);
+            if (userItem != null) 
+                return Ok(_mapper.Map<UserReadDto>(userItem));
             var userModel = _mapper.Map<User>(userAddDto);
             _repo.AddUser(userModel);
             _repo.SaveChanges();
-
-            //var userReadDto = _mapper.Map<BookReadDto>(userModel);
-
             return Ok(userModel);
+            
         }
     }
 }

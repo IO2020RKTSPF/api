@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "/home/tomek/git_Repos/podziel_sie_ksiazka/api/api.csproj",
+    "projectUniqueName": "/Users/rtry/RiderProjects/api/api.csproj",
     "projectName": "api",
-    "projectPath": "/home/tomek/git_Repos/podziel_sie_ksiazka/api/api.csproj",
-    "outputPath": "/home/tomek/git_Repos/podziel_sie_ksiazka/api/obj/",
+    "projectPath": "/Users/rtry/RiderProjects/api/api.csproj",
+    "outputPath": "/Users/rtry/RiderProjects/api/obj/",
     "projectStyle": "PackageReference",
     "originalTargetFrameworks": [
       "netcoreapp3.1"
@@ -75,12 +75,6 @@
       ],
       "assetTargetFallback": true,
       "warn": true,
-      "downloadDependencies": [
-        {
-          "name": "Microsoft.AspNetCore.App.Ref",
-          "version": "[3.1.8, 3.1.8]"
-        }
-      ],
       "frameworkReferences": {
         "Microsoft.AspNetCore.App": {
           "privateAssets": "none"
@@ -89,7 +83,7 @@
           "privateAssets": "all"
         }
       },
-      "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.108/RuntimeIdentifierGraph.json"
+      "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.402/RuntimeIdentifierGraph.json"
     }
   }
 }
