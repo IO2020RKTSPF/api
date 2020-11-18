@@ -33,6 +33,7 @@ namespace api.Controllers
             var userItem = _repo.GetUserByLoginId(id);
             if (userItem == null) return NotFound();
             return Ok(_mapper.Map<UserReadDto>(userItem));
+            
         }
 
         [HttpPost]
