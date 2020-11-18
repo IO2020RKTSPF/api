@@ -38,13 +38,15 @@ namespace api.Controllers
         [HttpPost]
         public ActionResult<UserReadDto> AddUser(UserAddDto userAddDto)
         {
+
+            var userItem = _repo.GetUserByLoginId(userAddDto.LoginId);
+            if (userItem != null) 
+                return Ok(_mapper.Map<UserReadDto>(userItem));
             var userModel = _mapper.Map<User>(userAddDto);
             _repo.AddUser(userModel);
             _repo.SaveChanges();
-
-            //var userReadDto = _mapper.Map<BookReadDto>(userModel);
-
             return Ok(userModel);
+            
         }
     }
 }
