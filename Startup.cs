@@ -58,36 +58,6 @@ namespace api
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
-                options.Events = new JwtBearerEvents()
-                {
-                    OnTokenValidated = c =>
-                    {
-                        Console.WriteLine("validated");
-                        return Task.CompletedTask;
-                    },
-                    OnAuthenticationFailed = c =>
-                    {
-                        Console.WriteLine("failed");
-                        return Task.CompletedTask;
-                    },
-                    OnChallenge = c =>
-                    {
-                        Console.WriteLine("chellgenge");
-                        return Task.CompletedTask;
-                    },
-                    OnMessageReceived = c =>
-                    {
-                        Console.WriteLine("msg");
-                        return Task.CompletedTask;
-                    },
-                    OnForbidden = c =>
-                    {
-                        Console.WriteLine("forbidden");
-                        return Task.CompletedTask;
-                    }
-                    
-                };
-
             });
         }
 
