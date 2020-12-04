@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,10 @@ namespace api.Controllers
         [HttpPost]
         public ActionResult<BookReadDto> AddBook(BookAddDto bookAddDto)
         {
+
+            if (Int32.Parse(User.Claims.First(p => p.Type == "id").Value) != bookAddDto.UserId)
+                return Forbid();
+            
             var bookModel = _mapper.Map<Book>(bookAddDto);
             _repo.AddBook(bookModel);
             _repo.SaveChanges();
