@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Policy;
 using api.Data;
 using api.DTOs;
 using api.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
+    [Authorize]
     [Route("api/books")]
     [ApiController]
     public class BooksController : Controller
@@ -22,7 +25,6 @@ namespace api.Controllers
             _repo = repo;
             _mapper = mapper;
         }
-        
         
         [HttpGet]
         public ActionResult<IEnumerable<BookReadDto>> GetAllBooks()
@@ -38,6 +40,7 @@ namespace api.Controllers
             if (bookItem == null) return NotFound();
             return Ok(_mapper.Map<BookReadDto>(bookItem));
         }
+        [Authorize]
         [HttpPost]
         public ActionResult<BookReadDto> AddBook(BookAddDto bookAddDto)
         {

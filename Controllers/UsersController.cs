@@ -42,19 +42,17 @@ namespace api.Controllers
             if (userItem == null) return NotFound();
             
             string key = "dlkfjg0934u5tdg54g";
-            var issuer = "podzielsieksiazka.northeurope.cloudapp.azure.com";
+            var issuer = "http://podzielsieksiazka.northeurope.cloudapp.azure.com";
             
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var securityKey = new SymmetricSecurityKey(Encoding.Default.GetBytes(key));
             var credentials = new SigningCredentials(securityKey,SecurityAlgorithms.HmacSha256);
             
             var permClaims = new List<Claim>();
             permClaims.Add(new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()));
-            permClaims.Add(new Claim("valid","1"));
-            permClaims.Add(new Claim("googleId",googleId));
-            permClaims.Add(new Claim("id","1"));
-            
-            var token = new JwtSecurityToken(issuer,
-                issuer, 
+            permClaims.Add(new Claim("id",userItem.Id.ToString()));
+
+            var token = new JwtSecurityToken(null,
+                null, 
                 permClaims,    
                 expires: DateTime.Now.AddDays(1),    
                 signingCredentials: credentials);    
