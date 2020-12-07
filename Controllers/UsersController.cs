@@ -64,7 +64,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<UserReadDto> AddUser(UserAddDto userAddDto)
+        public ActionResult<Object> AddUser(UserAddDto userAddDto)
         {
 
             var userItem = _repo.GetUserByLoginId(userAddDto.LoginId);
@@ -73,7 +73,29 @@ namespace api.Controllers
             var userModel = _mapper.Map<User>(userAddDto);
             _repo.AddUser(userModel);
             _repo.SaveChanges();
-            return Ok(userModel);
+            
+            
+            
+            
+            string key = "dlkfjg0934u5tdg54g";
+            var issuer = "http://podzielsieksiazka.northeurope.cloudapp.azure.com";
+            
+            var securityKey = new SymmetricSecurityKey(Encoding.Default.GetBytes(key));
+            var credentials = new SigningCredentials(securityKey,SecurityAlgorithms.HmacSha256);
+            
+            var permClaims = new List<Claim>();
+            permClaims.Add(new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()));
+            permClaims.Add(new Claim("id",userModel.Id.ToString()));
+
+            var token = new JwtSecurityToken(null,
+                null, 
+                permClaims,    
+                expires: DateTime.Now.AddDays(1),    
+                signingCredentials: credentials);    
+            var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);    
+            
+            
+            return new{token = jwtToken,user = userModel};
             
         }
     }
