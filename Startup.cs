@@ -1,4 +1,7 @@
 using System;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 using api.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,8 +10,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Server.HttpSys;
+using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Asn1.Cmp;
 
 namespace api
 {
@@ -38,11 +45,26 @@ namespace api
             {
                 c.SwaggerDoc("v1",new OpenApiInfo {Title="API docs",Version = "v1"});
             });
+
+            services.AddAuthentication(options => 
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("dlkfjg0934u5tdg54g")),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, PodzielSieKsiazkaContext context)
         {
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -55,6 +77,8 @@ namespace api
                 c.RoutePrefix = String.Empty;
             });
 
+            
+            
             app.UseCors(x => x
                     .AllowAnyHeader()
                     .AllowAnyOrigin())
@@ -63,14 +87,14 @@ namespace api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            
         }
     }
 }
