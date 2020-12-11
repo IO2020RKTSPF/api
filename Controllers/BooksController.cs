@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Authorize]
     [Route("api/books")]
     [ApiController]
     public class BooksController : Controller
