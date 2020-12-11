@@ -12,13 +12,9 @@ namespace api.DTOs
         [Required]
         public string Isbn { get; set; }
         [Required]
-        public bool IsAvaible { get; set; }
-        [Required]
         public string Description { get; set; }
         [Required]
         public string ImgUrl { get; set; }
-        [Required]
-        public DateTime AddedDate { get; set; }
         [Required]
         public int UserId { get; set; }
     }

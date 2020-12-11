@@ -49,6 +49,8 @@ namespace api.Controllers
                 return Forbid();
             
             var bookModel = _mapper.Map<Book>(bookAddDto);
+            bookModel.AddedDate = DateTime.Now;
+            bookModel.IsAvaible = true;
             _repo.AddBook(bookModel);
             _repo.SaveChanges();
 
