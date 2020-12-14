@@ -36,11 +36,17 @@ namespace api.Controllers
             return Ok(_mapper.Map<UserReadDto>(userItem));
         }
         [HttpPost("login")]
-        public ActionResult<Object> GetUserByLoginId(string googleId)
+        public ActionResult<Object> GetUserByLoginId(UserAddDto userAddDto)
         {
             
-            var userItem = _repo.GetUserByLoginId(googleId);
-            if (userItem == null) return NotFound();
+            var userItem = _repo.GetUserByLoginId(userAddDto.LoginId);
+            if (userItem == null)
+            {
+                var userModel = _mapper.Map<User>(userAddDto);
+                _repo.AddUser(userModel);
+                _repo.SaveChanges();
+                userItem = _repo.GetUserByLoginId(userModel.LoginId);
+            }
             
             string key = "dlkfjg0934u5tdg54g";
             var issuer = "http://podzielsieksiazka.northeurope.cloudapp.azure.com";
@@ -58,45 +64,7 @@ namespace api.Controllers
                 expires: DateTime.Now.AddDays(1),    
                 signingCredentials: credentials);    
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);    
-            return new { token = jwtToken, user = _mapper.Map<UserReadDto>(userItem)};   
-            
-            
-        }
-
-        [HttpPost]
-        public ActionResult<Object> AddUser(UserAddDto userAddDto)
-        {
-
-            var userItem = _repo.GetUserByLoginId(userAddDto.LoginId);
-            if (userItem != null) 
-                return Ok(_mapper.Map<UserReadDto>(userItem));
-            var userModel = _mapper.Map<User>(userAddDto);
-            _repo.AddUser(userModel);
-            _repo.SaveChanges();
-            
-            
-            
-            
-            string key = "dlkfjg0934u5tdg54g";
-            var issuer = "http://podzielsieksiazka.northeurope.cloudapp.azure.com";
-            
-            var securityKey = new SymmetricSecurityKey(Encoding.Default.GetBytes(key));
-            var credentials = new SigningCredentials(securityKey,SecurityAlgorithms.HmacSha256);
-            
-            var permClaims = new List<Claim>();
-            permClaims.Add(new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()));
-            permClaims.Add(new Claim("id",userModel.Id.ToString()));
-
-            var token = new JwtSecurityToken(null,
-                null, 
-                permClaims,    
-                expires: DateTime.Now.AddDays(1),    
-                signingCredentials: credentials);    
-            var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);    
-            
-            
-            return new{token = jwtToken,user = userModel};
-            
+            return new { token = jwtToken, user = _mapper.Map<UserReadDto>(userItem)};
         }
     }
 }
