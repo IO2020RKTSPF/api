@@ -17,5 +17,7 @@ namespace api.Models
         public string Name { get; set; }
         [Newtonsoft.Json.JsonIgnore][JsonIgnore][IgnoreMap][Ignore]
         public ICollection<Book> Books { get; set; }
+        [Newtonsoft.Json.JsonIgnore][JsonIgnore][IgnoreMap][Ignore]
+        public ICollection<Transaction> Transactions { get; set; }
     }
 }
