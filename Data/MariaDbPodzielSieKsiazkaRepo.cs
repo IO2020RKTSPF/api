@@ -69,5 +69,11 @@ namespace api.Data
                 .Include(p => p.Customer)
                 .FirstOrDefault(p => p.Id == id);
         }
+
+        public void AddTransaction(Transaction transaction)
+        {
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+            _context.Transactions.Add(transaction);
+        }
     }
 }

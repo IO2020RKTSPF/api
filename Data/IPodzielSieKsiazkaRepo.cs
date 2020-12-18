@@ -17,5 +17,6 @@ namespace api.Data
         void AddUser(User user);
 
         Transaction GetTransactionById(int id);
+        void AddTransaction(Transaction transaction);
     }
 }

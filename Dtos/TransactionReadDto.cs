@@ -5,11 +5,10 @@ namespace api.DTOs
 {
     public class TransactionReadDto
     {
-        public int Id;
-        public User Owner;
-        public User Customer;        
-        public Book Book;
-        public DateTime DateTimeStart;
-        public DateTime DateTimeEnd;
+        public int Id{ get; set; }
+        public User Customer{ get; set; }     
+        public Book Book{ get; set; }
+        public DateTime DateTimeStart{ get; set; }
+        public DateTime DateTimeEnd{ get; set; }
     }
 }

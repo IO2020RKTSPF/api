@@ -6,9 +6,8 @@ namespace api.DTOs
 {
     public class TransactionAddDto
     {
-        public User Owner;
-        public User Customer;        
-        public Book Book;
-        public int WeeksOfRentalTime;
+        public int CustomerId{ get; set; }       
+        public int BookId{ get; set; }
+        public int DaysOfRentalTime{ get; set; }
     }
 }
