@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
 namespace api.Models
@@ -6,14 +7,12 @@ namespace api.Models
     public class Transaction
     {
         [Key]
-        public int Id;
+        public int Id { get; set; }
         [Required]
-        public User Owner;
+        public User Customer{ get; set; }       
         [Required]
-        public User Customer;        
-        [Required]
-        public Book Book;
-        public DateTime DateTimeStart;
-        public DateTime DateTimeEnd;
+        public Book Book{ get; set; }
+        public DateTime DateTimeStart{ get; set; }
+        public DateTime DateTimeEnd{ get; set; }
     }
 }
