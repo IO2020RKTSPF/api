@@ -75,5 +75,14 @@ namespace api.Data
             if (transaction == null) throw new ArgumentNullException(nameof(transaction));
             _context.Transactions.Add(transaction);
         }
+
+        public IEnumerable<Transaction> GetAllTransactionsByUserId(int id)
+        {
+            return _context.Transactions
+                .Include(p => p.Customer)
+                .Include(p=> p.Book)
+                .Where(p => p.CustomerId == id || p.Book.Id == id)
+                .ToList();
+        }
     }
 }

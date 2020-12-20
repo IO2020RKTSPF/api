@@ -79,5 +79,13 @@ namespace api.Controllers
             _repo.SaveChanges();
             return Ok(_mapper.Map<TransactionReadDto>(transaction));
         }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<TransactionReadDto>> GetAllTransactionsByUserId()
+        {
+            int id = Int32.Parse(User.Claims.First(p => p.Type == "id").Value);
+            var transactionItems = _repo.GetAllTransactionsByUserId(id).ToList();
+            return Ok(_mapper.Map<IEnumerable<TransactionReadDto>>(transactionItems));
+        }
     }
 }

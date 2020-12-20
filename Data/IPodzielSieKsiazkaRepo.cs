@@ -17,5 +17,6 @@ namespace api.Data
 
         Transaction GetTransactionById(int id);
         void AddTransaction(Transaction transaction);
+        IEnumerable<Transaction> GetAllTransactionsByUserId(int id);
     }
 }
