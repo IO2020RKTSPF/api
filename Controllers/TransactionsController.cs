@@ -36,7 +36,11 @@ namespace api.Controllers
         {
             
             Book book = _repo.GetBookById(transactionAddDto.BookId);
+            if (book == null)
+                return NotFound();
             if (Int32.Parse(User.Claims.First(p => p.Type == "id").Value) != book.Id)
+                return Forbid();
+            if (book.IsAvaible == false)
                 return Forbid();
             
             var transactionModel = _mapper.Map<Transaction>(transactionAddDto);
@@ -44,7 +48,12 @@ namespace api.Controllers
             transactionModel.DateTimeStart = DateTime.Now;
             transactionModel.DateTimeEnd = DateTime.Now.AddDays(transactionAddDto.DaysOfRentalTime);
             _repo.AddTransaction(transactionModel);
+            book.IsAvaible = false;
             _repo.SaveChanges();
+            
+            
+            
+            
             
             var tReadDto = _mapper.Map<TransactionReadDto>(transactionModel);
 

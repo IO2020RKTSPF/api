@@ -11,7 +11,6 @@ namespace api.Data
         IEnumerable<Book> GetAllBooks();
         Book GetBookById(int id);
         void AddBook(Book book);
-
         User GetUserById(int id);
         User GetUserByLoginId(string loginId);
         void AddUser(User user);
