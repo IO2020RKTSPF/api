@@ -8,6 +8,7 @@ namespace api.DTOs
         public int Id{ get; set; }
         public User Customer{ get; set; }     
         public Book Book{ get; set; }
+        public string Status { get; set; }
         public DateTime DateTimeStart{ get; set; }
         public DateTime DateTimeEnd{ get; set; }
     }

@@ -38,8 +38,7 @@ namespace api.Controllers
             Book book = _repo.GetBookById(transactionAddDto.BookId);
             if (book == null)
                 return NotFound();
-            if (Int32.Parse(User.Claims.First(p => p.Type == "id").Value) != book.Id)
-                return Forbid();
+            
             if (book.IsAvaible == false)
                 return Forbid();
             
@@ -47,17 +46,38 @@ namespace api.Controllers
 
             transactionModel.DateTimeStart = DateTime.Now;
             transactionModel.DateTimeEnd = DateTime.Now.AddDays(transactionAddDto.DaysOfRentalTime);
+            transactionModel.Status = "Pending";
+            transactionModel.CustomerId = Int32.Parse(User.Claims.First(p => p.Type == "id").Value);
             _repo.AddTransaction(transactionModel);
             book.IsAvaible = false;
             _repo.SaveChanges();
             
-            
-            
-            
-            
             var tReadDto = _mapper.Map<TransactionReadDto>(transactionModel);
 
             return Ok(tReadDto);
+        }
+
+        [HttpPut]
+        public ActionResult<TransactionReadDto> ChangeTransactionStatusById(TransactionChangeDto transactionChangeDto)
+        {
+            Transaction transaction = _repo.GetTransactionById(transactionChangeDto.Id);
+            
+            if (transaction == null)
+                return NotFound();
+            if (transactionChangeDto.Status != "Accepted" || transactionChangeDto.Status != "Declined" ||
+                transactionChangeDto.Status != "Finished" || transactionChangeDto.Status != "Rented")
+                return Forbid();
+
+            Book book = _repo.GetBookById(transaction.BookId);
+
+            if (Int32.Parse(User.Claims.First(p => p.Type == "id").Value) != book.Id)
+                return Forbid();
+
+            transaction.Status = transactionChangeDto.Status;
+            if (transaction.Status == "Declined" || transaction.Status == "Finished")
+                book.IsAvaible = true;
+            _repo.SaveChanges();
+            return Ok(_mapper.Map<TransactionReadDto>(transaction));
         }
     }
 }

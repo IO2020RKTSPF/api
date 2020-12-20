@@ -13,6 +13,8 @@ namespace api.Models
         public int CustomerId { get; set; }
         [Required]
         public int BookId { get; set; }
+        [Required]
+        public string Status { get; set; }
         [JsonIgnore]
         public User Customer{ get; set; }       
         [JsonIgnore]
