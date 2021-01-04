@@ -45,7 +45,7 @@ namespace api.Controllers
             if (book.UserId == Int32.Parse(User.Claims.First(p => p.Type == "id").Value))
                 return Forbid();
 
-                var transactionModel = _mapper.Map<Transaction>(transactionAddDto);
+            var transactionModel = _mapper.Map<Transaction>(transactionAddDto);
 
             transactionModel.DateTimeStart = DateTime.Now;
             transactionModel.DateTimeEnd = DateTime.Now.AddDays(transactionAddDto.DaysOfRentalTime);
