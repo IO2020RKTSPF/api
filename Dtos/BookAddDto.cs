@@ -15,5 +15,9 @@ namespace api.DTOs
         public string Description { get; set; }
         [Required]
         public string ImgUrl { get; set; }
+        [Required]
+        public double Latitude { get; set; }
+        [Required]
+        public double Longitude { get; set; }
     }
 }
