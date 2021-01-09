@@ -60,15 +60,16 @@ namespace api.Controllers
             return Ok(tReadDto);
         }
 
-        [HttpPut]
-        public ActionResult<TransactionReadDto> ChangeTransactionStatusById(TransactionChangeDto transactionChangeDto)
+        [HttpPatch("{id}")]
+        public ActionResult<TransactionReadDto> ChangeTransactionStatusById(TransactionChangeDto transactionChangeDto,int id)
         {
-            Transaction transaction = _repo.GetTransactionById(transactionChangeDto.Id);
+            Transaction transaction = _repo.GetTransactionById(id);
             
             if (transaction == null)
                 return NotFound();
-            if (transactionChangeDto.Status != "Accepted" || transactionChangeDto.Status != "Declined" ||
-                transactionChangeDto.Status != "Finished" || transactionChangeDto.Status != "Rented")
+            
+            if (!(transactionChangeDto.Status == "Accepted" || transactionChangeDto.Status == "Declined" ||
+                transactionChangeDto.Status == "Finished" || transactionChangeDto.Status == "Rented"))
                 return Forbid();
 
             Book book = _repo.GetBookById(transaction.BookId);
