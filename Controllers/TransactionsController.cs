@@ -67,6 +67,9 @@ namespace api.Controllers
             
             if (transaction == null)
                 return NotFound();
+
+            if (transaction.Status == "Finished" || transaction.Status == "Declined")
+                return Forbid();
             
             if (!(transactionChangeDto.Status == "Accepted" || transactionChangeDto.Status == "Declined" ||
                 transactionChangeDto.Status == "Finished" || transactionChangeDto.Status == "Rented"))
