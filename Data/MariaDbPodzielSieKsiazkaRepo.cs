@@ -61,5 +61,28 @@ namespace api.Data
 
             _context.Users.Add(user);
         }
+
+        public Transaction GetTransactionById(int id)
+        {
+            return _context.Transactions
+                .Include(p => p.Book)
+                .Include(p => p.Customer)
+                .FirstOrDefault(p => p.Id == id);
+        }
+
+        public void AddTransaction(Transaction transaction)
+        {
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+            _context.Transactions.Add(transaction);
+        }
+
+        public IEnumerable<Transaction> GetAllTransactionsByUserId(int id)
+        {
+            return _context.Transactions
+                .Include(p => p.Customer)
+                .Include(p=> p.Book)
+                .Where(p => p.CustomerId == id || p.Book.Id == id)
+                .ToList();
+        }
     }
 }

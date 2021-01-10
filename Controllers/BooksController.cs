@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Policy;
 using api.Data;
 using api.DTOs;
 using api.Models;
@@ -44,11 +41,12 @@ namespace api.Controllers
         [HttpPost]
         public ActionResult<BookReadDto> AddBook(BookAddDto bookAddDto)
         {
-
-            if (Int32.Parse(User.Claims.First(p => p.Type == "id").Value) != bookAddDto.UserId)
+            int userId = Int32.Parse(User.Claims.First(p => p.Type == "id").Value);
+            if (Int32.Parse(User.Claims.First(p => p.Type == "id").Value) != userId)
                 return Forbid();
             
             var bookModel = _mapper.Map<Book>(bookAddDto);
+            bookModel.UserId = userId;
             bookModel.AddedDate = DateTime.Now;
             bookModel.IsAvaible = true;
             _repo.AddBook(bookModel);

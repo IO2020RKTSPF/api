@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
 namespace api.Migrations
 {
     [DbContext(typeof(PodzielSieKsiazkaContext))]
-    partial class PodzielSieKsiazkaContextModelSnapshot : ModelSnapshot
+    [Migration("20201220135009_EightMigration")]
+    partial class EightMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,8 +79,9 @@ namespace api.Migrations
                     b.Property<DateTime>("DateTimeStart")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

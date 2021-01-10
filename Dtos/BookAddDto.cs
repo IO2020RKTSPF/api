@@ -15,7 +15,5 @@ namespace api.DTOs
         public string Description { get; set; }
         [Required]
         public string ImgUrl { get; set; }
-        [Required]
-        public int UserId { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using api.Data;
 using Microsoft.AspNetCore.Builder;
@@ -31,7 +32,10 @@ namespace api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
             services.AddCors();
 
@@ -81,7 +85,8 @@ namespace api
             
             app.UseCors(x => x
                     .AllowAnyHeader()
-                    .AllowAnyOrigin())
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod())
                 .Build();
 
             app.UseHttpsRedirection();
