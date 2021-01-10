@@ -49,7 +49,7 @@ namespace api.Controllers
 
             transactionModel.DateTimeStart = DateTime.Now;
             transactionModel.DateTimeEnd = DateTime.Now.AddDays(transactionAddDto.DaysOfRentalTime);
-            transactionModel.Status = "Pending";
+            transactionModel.Status = TransactionStatus.Pending;
             transactionModel.CustomerId = Int32.Parse(User.Claims.First(p => p.Type == "id").Value);
             _repo.AddTransaction(transactionModel);
             book.IsAvaible = false;
@@ -68,11 +68,7 @@ namespace api.Controllers
             if (transaction == null)
                 return NotFound();
 
-            if (transaction.Status == "Finished" || transaction.Status == "Declined")
-                return Forbid();
-            
-            if (!(transactionChangeDto.Status == "Accepted" || transactionChangeDto.Status == "Declined" ||
-                transactionChangeDto.Status == "Finished" || transactionChangeDto.Status == "Rented"))
+            if (transaction.Status == TransactionStatus.Finished || transaction.Status == TransactionStatus.Declined)
                 return Forbid();
 
             Book book = _repo.GetBookById(transaction.BookId);
@@ -81,7 +77,7 @@ namespace api.Controllers
                 return Forbid();
 
             transaction.Status = transactionChangeDto.Status;
-            if (transaction.Status == "Declined" || transaction.Status == "Finished")
+            if (transaction.Status == TransactionStatus.Declined || transaction.Status == TransactionStatus.Finished)
                 book.IsAvaible = true;
             _repo.SaveChanges();
             return Ok(_mapper.Map<TransactionReadDto>(transaction));
