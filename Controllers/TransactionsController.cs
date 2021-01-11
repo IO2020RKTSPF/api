@@ -41,8 +41,8 @@ namespace api.Controllers
             
             if (book.IsAvaible == false)
                 return Forbid();
-
-            if (book.UserId == Int32.Parse(User.Claims.First(p => p.Type == "id").Value))
+            var usrId = Int32.Parse(User.Claims.First(p => p.Type == "id").Value);
+            if (book.UserId == usrId)
                 return Forbid();
 
             var transactionModel = _mapper.Map<Transaction>(transactionAddDto);
@@ -56,7 +56,7 @@ namespace api.Controllers
             _repo.SaveChanges();
             
             var tReadDto = _mapper.Map<TransactionReadDto>(transactionModel);
-
+            tReadDto.Customer = _repo.GetUserById(usrId);
             return Ok(tReadDto);
         }
 

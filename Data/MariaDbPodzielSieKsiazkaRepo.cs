@@ -81,7 +81,8 @@ namespace api.Data
             return _context.Transactions
                 .Include(p => p.Customer)
                 .Include(p=> p.Book)
-                .Where(p => p.CustomerId == id || p.Book.Id == id)
+                .Include(p => p.Book.Owner)
+                .Where(p => p.Customer.Id == id | p.Book.UserId == id)
                 .ToList();
         }
     }
