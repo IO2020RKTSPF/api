@@ -67,6 +67,7 @@ namespace api.Data
             return _context.Transactions
                 .Include(p => p.Book)
                 .Include(p => p.Customer)
+                .Include(p => p.Book.Owner)
                 .FirstOrDefault(p => p.Id == id);
         }
 
