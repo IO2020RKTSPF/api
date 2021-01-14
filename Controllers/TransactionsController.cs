@@ -50,6 +50,7 @@ namespace api.Controllers
             transactionModel.DateTimeStart = DateTime.Now;
             transactionModel.DateTimeEnd = DateTime.Now.AddDays(transactionAddDto.DaysOfRentalTime);
             transactionModel.Status = TransactionStatus.Pending;
+            transactionModel.RoomId = Guid.NewGuid().ToString();
             transactionModel.CustomerId = Int32.Parse(User.Claims.First(p => p.Type == "id").Value);
             _repo.AddTransaction(transactionModel);
             book.IsAvaible = false;
