@@ -18,6 +18,8 @@ namespace api.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required] 
+        public string RoomId { get; set; }
         [Required]
         public int CustomerId { get; set; }
         [Required]
