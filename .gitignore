@@ -7,3 +7,5 @@
 /bin/
 /obj/
 /.idea/
+/api_web/bin/
+/api_web/obj/
