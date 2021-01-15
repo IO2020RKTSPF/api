@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using api.Models;
+using Geolocation;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
@@ -27,6 +28,23 @@ namespace api.Data
                 .Include(p=>p.Owner)
                 .ToList();
         }
+
+        public IEnumerable<Book> GetBooksByLocation(double longitude, double latitude, double radius)
+        {
+            CoordinateBoundaries boundaries = new CoordinateBoundaries(latitude, longitude, radius,DistanceUnit.Kilometers);
+
+            double minLatitude = boundaries.MinLatitude;
+            double maxLatitude = boundaries.MaxLatitude;
+            double minLongitude = boundaries.MinLongitude;
+            double maxLongitude = boundaries.MaxLongitude;
+
+            return  _context.Books
+                .Where(x => x.Latitude >= minLatitude && x.Latitude <= maxLatitude)
+                .Where(x => x.Longitude >= minLongitude && x.Longitude <= maxLongitude)
+                .Include(p => p.Owner)
+                .ToList();
+        }
+
 
         public Book GetBookById(int id)
         {

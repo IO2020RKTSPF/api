@@ -9,6 +9,7 @@ namespace api.Data
         bool SaveChanges();
 
         IEnumerable<Book> GetAllBooks();
+        IEnumerable<Book> GetBooksByLocation(double longitude, double latitude, double radius);
         Book GetBookById(int id);
         void AddBook(Book book);
         User GetUserById(int id);

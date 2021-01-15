@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using api.Data;
@@ -37,6 +38,15 @@ namespace api.Controllers
             if (bookItem == null) return NotFound();
             return Ok(_mapper.Map<BookReadDto>(bookItem));
         }
+
+        [HttpGet("ByGeolocation")]
+        public ActionResult<BookReadDto> GetBooksByLocation([FromQuery] double longitude, [FromQuery] double latitude,
+            [FromQuery] double radius)
+        {
+            var bookItems = _repo.GetBooksByLocation(longitude,latitude,radius).ToList();
+            return Ok(_mapper.Map< IEnumerable < BookReadDto >> (bookItems));
+        }
+        
         [Authorize]
         [HttpPost]
         public ActionResult<BookReadDto> AddBook(BookAddDto bookAddDto)
