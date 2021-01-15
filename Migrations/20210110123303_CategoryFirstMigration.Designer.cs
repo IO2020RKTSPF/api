@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
 namespace api.Migrations
 {
     [DbContext(typeof(PodzielSieKsiazkaContext))]
-    partial class PodzielSieKsiazkaContextModelSnapshot : ModelSnapshot
+    [Migration("20210110123303_CategoryFirstMigration")]
+    partial class CategoryFirstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,12 +50,6 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<double>("Latitude")
-                        .HasColumnType("double");
-
-                    b.Property<double>("Longitude")
-                        .HasColumnType("double");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
@@ -86,8 +82,9 @@ namespace api.Migrations
                     b.Property<DateTime>("DateTimeStart")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

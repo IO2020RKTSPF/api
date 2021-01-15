@@ -53,6 +53,14 @@ namespace api.Data
                 .FirstOrDefault(p => p.Id == id);
         }
 
+        public IEnumerable<Book> GetAllBooksByCategory(CategoryOfBook category)
+        {
+            return _context.Books
+                .Include(p => p.Owner)
+                .Where(p => p.Category == category)
+                .ToList();
+        }
+
         public void AddBook(Book book)
         {
             if (book == null)throw new ArgumentNullException(nameof(book));

@@ -38,7 +38,14 @@ namespace api.Controllers
             if (bookItem == null) return NotFound();
             return Ok(_mapper.Map<BookReadDto>(bookItem));
         }
-
+        
+        [HttpGet("/byCategory/{category}")]
+        public ActionResult<IEnumerable<BookReadDto>> GetAllBooksByCategory(CategoryOfBook category)
+        {
+            var bookItems = _repo.GetAllBooksByCategory(category).ToList();
+            return Ok(_mapper.Map<IEnumerable<BookReadDto>>(bookItems));
+        }
+        
         [HttpGet("ByGeolocation")]
         public ActionResult<BookReadDto> GetBooksByLocation([FromQuery] double longitude, [FromQuery] double latitude,
             [FromQuery] double radius)
@@ -46,7 +53,6 @@ namespace api.Controllers
             var bookItems = _repo.GetBooksByLocation(longitude,latitude,radius).ToList();
             return Ok(_mapper.Map< IEnumerable < BookReadDto >> (bookItems));
         }
-        
         [Authorize]
         [HttpPost]
         public ActionResult<BookReadDto> AddBook(BookAddDto bookAddDto)

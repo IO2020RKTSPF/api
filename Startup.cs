@@ -49,7 +49,7 @@ namespace api
             {
                 c.SwaggerDoc("v1",new OpenApiInfo {Title="API docs",Version = "v1"});
             });
-
+            
             services.AddAuthentication(options => 
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -92,7 +92,7 @@ namespace api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 
