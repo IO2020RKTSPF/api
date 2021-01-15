@@ -41,34 +41,34 @@ namespace api.Controllers
             
             if (book.IsAvaible == false)
                 return Forbid();
-
-            if (book.UserId == Int32.Parse(User.Claims.First(p => p.Type == "id").Value))
+            var usrId = Int32.Parse(User.Claims.First(p => p.Type == "id").Value);
+            if (book.UserId == usrId)
                 return Forbid();
 
             var transactionModel = _mapper.Map<Transaction>(transactionAddDto);
 
             transactionModel.DateTimeStart = DateTime.Now;
             transactionModel.DateTimeEnd = DateTime.Now.AddDays(transactionAddDto.DaysOfRentalTime);
-            transactionModel.Status = "Pending";
+            transactionModel.Status = TransactionStatus.Pending;
             transactionModel.CustomerId = Int32.Parse(User.Claims.First(p => p.Type == "id").Value);
             _repo.AddTransaction(transactionModel);
             book.IsAvaible = false;
             _repo.SaveChanges();
             
             var tReadDto = _mapper.Map<TransactionReadDto>(transactionModel);
-
+            tReadDto.Customer = _repo.GetUserById(usrId);
             return Ok(tReadDto);
         }
 
-        [HttpPut]
-        public ActionResult<TransactionReadDto> ChangeTransactionStatusById(TransactionChangeDto transactionChangeDto)
+        [HttpPatch("{id}")]
+        public ActionResult<TransactionReadDto> ChangeTransactionStatusById(TransactionChangeDto transactionChangeDto,int id)
         {
-            Transaction transaction = _repo.GetTransactionById(transactionChangeDto.Id);
+            Transaction transaction = _repo.GetTransactionById(id);
             
             if (transaction == null)
                 return NotFound();
-            if (transactionChangeDto.Status != "Accepted" || transactionChangeDto.Status != "Declined" ||
-                transactionChangeDto.Status != "Finished" || transactionChangeDto.Status != "Rented")
+
+            if (transaction.Status == TransactionStatus.Finished || transaction.Status == TransactionStatus.Declined)
                 return Forbid();
 
             Book book = _repo.GetBookById(transaction.BookId);
@@ -77,7 +77,7 @@ namespace api.Controllers
                 return Forbid();
 
             transaction.Status = transactionChangeDto.Status;
-            if (transaction.Status == "Declined" || transaction.Status == "Finished")
+            if (transaction.Status == TransactionStatus.Declined || transaction.Status == TransactionStatus.Finished)
                 book.IsAvaible = true;
             _repo.SaveChanges();
             return Ok(_mapper.Map<TransactionReadDto>(transaction));

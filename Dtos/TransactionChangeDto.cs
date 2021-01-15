@@ -1,8 +1,9 @@
+using api.Models;
+
 namespace api.DTOs
 {
     public class TransactionChangeDto
     {
-        public int Id{ get; set; }
-        public string Status { get; set; }
+        public TransactionStatus Status { get; set; }
     }
 }

@@ -5,6 +5,15 @@ using Newtonsoft.Json;
 
 namespace api.Models
 {
+
+    public enum TransactionStatus
+    {
+        Pending,
+        Accepted,
+        Declined,
+        Rented,
+        Finished
+    }
     public class Transaction
     {
         [Key]
@@ -14,7 +23,7 @@ namespace api.Models
         [Required]
         public int BookId { get; set; }
         [Required]
-        public string Status { get; set; }
+        public TransactionStatus Status { get; set; }
         [JsonIgnore]
         public User Customer{ get; set; }       
         [JsonIgnore]

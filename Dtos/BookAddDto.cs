@@ -18,5 +18,9 @@ namespace api.DTOs
         public CategoryOfBook Category { get; set; }
         [Required]
         public string ImgUrl { get; set; }
+        [Required]
+        public double Latitude { get; set; }
+        [Required]
+        public double Longitude { get; set; }
     }
 }

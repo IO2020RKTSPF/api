@@ -15,6 +15,8 @@ namespace api.DTOs
         public string Description { get; set; }
         public CategoryOfBook Category { get; set; }
         public string ImgUrl { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public DateTime AddedDate { get; set; }
         public User Owner { get; set; }
     }
