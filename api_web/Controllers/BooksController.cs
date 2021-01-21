@@ -72,5 +72,18 @@ namespace api.Controllers
 
             return Ok(bookReadDto);
         }
+
+        [HttpGet("search")]
+        public ActionResult<IEnumerable<BookReadDto>> SearchBooks([FromQuery] List<CategoryOfBook> categoriesOfBooks,
+            [FromQuery] string regexString="", [FromQuery] double longitude=50, [FromQuery] double latitude=50,
+            [FromQuery] double radius=1000000)
+        {
+            if (categoriesOfBooks.Count == 0) categoriesOfBooks = Enum.GetValues(typeof(CategoryOfBook))
+                .Cast<CategoryOfBook>().ToList();
+            
+            var bookItems = _repo.SearchBooks(regexString,categoriesOfBooks,longitude,latitude,radius)
+                .ToList();
+            return Ok(_mapper.Map< IEnumerable < BookReadDto >> (bookItems));
+        }
     }
 }

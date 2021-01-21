@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using api.Models;
 using Geolocation;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,24 @@ namespace api.Data
                 .Where(x => x.Longitude >= minLongitude && x.Longitude <= maxLongitude)
                 .Include(p => p.Owner)
                 .ToList();
+        }
+
+        public IEnumerable<Book> SearchBooks(string regexString, List<CategoryOfBook> categoriesOfBook, double longitude, double latitude, double radius)
+        {
+            CoordinateBoundaries boundaries = new CoordinateBoundaries(latitude, longitude, radius,DistanceUnit.Kilometers);
+            Regex regex;
+            if
+                (regexString == "") regex = new Regex("^.*$");
+            else
+                regex = new Regex($"^.*{regexString}.*$",RegexOptions.IgnoreCase);
+
+            return _context.Books
+                .Where(x => x.Latitude >= boundaries.MinLatitude && x.Latitude <= boundaries.MaxLatitude)
+                .Where(x => x.Longitude >= boundaries.MinLongitude && x.Longitude <= boundaries.MaxLongitude)
+                .Where(x=>categoriesOfBook.Contains(x.Category))
+                .Include(p => p.Owner)
+                .ToList()
+                .FindAll(x => regex.IsMatch(x.Title));
         }
 
 

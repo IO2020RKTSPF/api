@@ -10,9 +10,11 @@ namespace api.Data
 
         IEnumerable<Book> GetAllBooks();
         IEnumerable<Book> GetBooksByLocation(double longitude, double latitude, double radius);
+        IEnumerable<Book> SearchBooks(string regexString,List<CategoryOfBook> categoriesOfBook,double longitude, double latitude, double radius);
         Book GetBookById(int id);
         IEnumerable<Book> GetAllBooksByCategory(CategoryOfBook category);
         void AddBook(Book book);
+        
         User GetUserById(int id);
         User GetUserByLoginId(string loginId);
         void AddUser(User user);
