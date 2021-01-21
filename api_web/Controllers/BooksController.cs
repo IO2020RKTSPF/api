@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using api.Data;
@@ -63,6 +62,31 @@ namespace api.Controllers
             var bookItems = _repo.SearchBooks(regexString,categoriesOfBooks,longitude,latitude,radius)
                 .ToList();
             return Ok(_mapper.Map< IEnumerable < BookReadDto >> (bookItems));
+        }
+        
+        [Authorize]
+        [HttpPatch("{id}")]
+        public ActionResult<BookReadDto> EditBook(BookChangeDto bookChangeDto, int id)
+        {
+            Book book = _repo.GetBookById(id);
+            int userId = Int32.Parse(User.Claims.First(p => p.Type == "id").Value);
+            if (book.UserId != userId) return Forbid();
+            if (book.IsAvaible == false) return Forbid();
+
+            book.Author = bookChangeDto.Author;
+            book.Category = bookChangeDto.Category;
+            book.Description = bookChangeDto.Description;
+            book.Latitude = bookChangeDto.Latitude;
+            book.Longitude = bookChangeDto.Longitude;
+            book.ImgUrl = bookChangeDto.ImgUrl;
+            book.IsAvaible = bookChangeDto.IsAvaible;
+            book.Title = bookChangeDto.Title;
+            book.Isbn = bookChangeDto.Isbn;
+            
+            _repo.SaveChanges();
+
+            return Ok(_mapper.Map<BookReadDto>(book));
+            
         }
     }
 }
