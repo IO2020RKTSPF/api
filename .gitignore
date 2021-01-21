@@ -9,3 +9,5 @@
 /.idea/
 /api_web/bin/
 /api_web/obj/
+/api_test/bin/
+/TestResults/
