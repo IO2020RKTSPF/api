@@ -23,10 +23,8 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: pskdb
-      MYSQL_ROOT_PASSWORD: Inop2020
-      MYSQL_USER: root
-      MYSQL_PASSWORD: Inop2020
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
@@ -38,7 +36,7 @@ services:
     restart: unless-stopped
     tty: true
     build:
-      context: .
+      context: ./api_web
       dockerfile: Dockerfile
     ports:
       - "8080:80"

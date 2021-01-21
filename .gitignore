@@ -1,0 +1,14 @@
+.idea/
+*/.idea/
+*/bin/
+*/obj/
+*/package-lock.json
+.env
+/bin/
+/obj/
+/.idea/
+/api_web/bin/
+/api_web/obj/
+/api_test/bin/
+/TestResults/
+/api.sln.DotSettings.user
