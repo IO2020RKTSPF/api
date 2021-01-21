@@ -36,7 +36,7 @@ services:
     restart: unless-stopped
     tty: true
     build:
-      context: .
+      context: ./api_web
       dockerfile: Dockerfile
     ports:
       - "8080:80"
