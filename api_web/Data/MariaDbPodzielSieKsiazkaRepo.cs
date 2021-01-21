@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using api.Models;
 using Geolocation;
 using Microsoft.EntityFrameworkCore;
@@ -21,46 +22,32 @@ namespace api.Data
         {
             return (_context.SaveChanges()>=0);
         }
-
-        public IEnumerable<Book> GetAllBooks()
-        {
-            return _context.Books
-                .Include(p=>p.Owner)
-                .ToList();
-        }
-
-        public IEnumerable<Book> GetBooksByLocation(double longitude, double latitude, double radius)
+        
+        public IEnumerable<Book> SearchBooks(string regexString, List<CategoryOfBook> categoriesOfBook, double longitude, double latitude, double radius)
         {
             CoordinateBoundaries boundaries = new CoordinateBoundaries(latitude, longitude, radius,DistanceUnit.Kilometers);
+            Regex regex;
+            if
+                (regexString == "") regex = new Regex("^.*$");
+            else
+                regex = new Regex($"^.*{regexString}.*$",RegexOptions.IgnoreCase);
 
-            double minLatitude = boundaries.MinLatitude;
-            double maxLatitude = boundaries.MaxLatitude;
-            double minLongitude = boundaries.MinLongitude;
-            double maxLongitude = boundaries.MaxLongitude;
-
-            return  _context.Books
-                .Where(x => x.Latitude >= minLatitude && x.Latitude <= maxLatitude)
-                .Where(x => x.Longitude >= minLongitude && x.Longitude <= maxLongitude)
+            return _context.Books
+                .Where(x => x.Latitude >= boundaries.MinLatitude && x.Latitude <= boundaries.MaxLatitude)
+                .Where(x => x.Longitude >= boundaries.MinLongitude && x.Longitude <= boundaries.MaxLongitude)
+                .Where(x=>categoriesOfBook.Contains(x.Category))
                 .Include(p => p.Owner)
-                .ToList();
+                .ToList()
+                .FindAll(x => regex.IsMatch(x.Title));
         }
-
-
+        
         public Book GetBookById(int id)
         {
             return _context.Books
                 .Include(p=>p.Owner)
                 .FirstOrDefault(p => p.Id == id);
         }
-
-        public IEnumerable<Book> GetAllBooksByCategory(CategoryOfBook category)
-        {
-            return _context.Books
-                .Include(p => p.Owner)
-                .Where(p => p.Category == category)
-                .ToList();
-        }
-
+        
         public void AddBook(Book book)
         {
             if (book == null)throw new ArgumentNullException(nameof(book));
