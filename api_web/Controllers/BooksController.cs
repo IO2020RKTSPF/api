@@ -23,14 +23,7 @@ namespace api.Controllers
             _repo = repo;
             _mapper = mapper;
         }
-        
-        [HttpGet]
-        public ActionResult<IEnumerable<BookReadDto>> GetAllBooks()
-        {
-            var bookItems = _repo.GetAllBooks().ToList();
-            return Ok(_mapper.Map<IEnumerable<BookReadDto>>(bookItems));
-        }
-        
+
         [HttpGet("{id}",Name ="GetBookById")]
         public ActionResult<BookReadDto> GetBookById(int id)
         {
@@ -38,21 +31,7 @@ namespace api.Controllers
             if (bookItem == null) return NotFound();
             return Ok(_mapper.Map<BookReadDto>(bookItem));
         }
-        
-        [HttpGet("/byCategory/{category}")]
-        public ActionResult<IEnumerable<BookReadDto>> GetAllBooksByCategory(CategoryOfBook category)
-        {
-            var bookItems = _repo.GetAllBooksByCategory(category).ToList();
-            return Ok(_mapper.Map<IEnumerable<BookReadDto>>(bookItems));
-        }
-        
-        [HttpGet("ByGeolocation")]
-        public ActionResult<BookReadDto> GetBooksByLocation([FromQuery] double longitude, [FromQuery] double latitude,
-            [FromQuery] double radius)
-        {
-            var bookItems = _repo.GetBooksByLocation(longitude,latitude,radius).ToList();
-            return Ok(_mapper.Map< IEnumerable < BookReadDto >> (bookItems));
-        }
+
         [Authorize]
         [HttpPost]
         public ActionResult<BookReadDto> AddBook(BookAddDto bookAddDto)
@@ -73,7 +52,7 @@ namespace api.Controllers
             return Ok(bookReadDto);
         }
 
-        [HttpGet("search")]
+        [HttpGet]
         public ActionResult<IEnumerable<BookReadDto>> SearchBooks([FromQuery] List<CategoryOfBook> categoriesOfBooks,
             [FromQuery] string regexString="", [FromQuery] double longitude=50, [FromQuery] double latitude=50,
             [FromQuery] double radius=1000000)

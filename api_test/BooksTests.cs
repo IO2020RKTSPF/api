@@ -78,12 +78,16 @@ namespace api_test
                     UserId = 1
                 }
             };
-            userRepo.Setup(m => m.GetAllBooks()).Returns(items.AsEnumerable());            
+            var categoriesOfBooks = Enum.GetValues(typeof(CategoryOfBook))
+                .Cast<CategoryOfBook>().ToList();
+            userRepo.Setup(m => m.SearchBooks("",categoriesOfBooks,40 ,40,  100000)).Returns(items.AsEnumerable());            
             BooksController controller = new BooksController(
                 userRepo.Object,mapper);
 
+            
+            
             // Act
-            var result = controller.GetAllBooks();
+            var result = controller.SearchBooks(categoriesOfBooks,"",40 ,40,  100000);
 
             var itemsDto = mapper.Map<IEnumerable<BookReadDto>>(items).ToList();
 
